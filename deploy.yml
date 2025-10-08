@@ -1,0 +1,7 @@
+- hosts: k8s_master
+  become: yes
+  tasks:
+    - name: Deploy healthcare app
+      shell: |
+        kubectl apply -f /home/ubuntu/healthcare-deployment.yml
+        kubectl apply -f /home/ubuntu/healthcare-service.yml
