@@ -1,42 +1,29 @@
-pipeline{
-    agent any
-    stages{
-        stage('checkout the code from github'){
-            steps{
-                 git url: 'https://github.com/akshu20791/health-care-project/'
-                 echo 'github url checkout'
-            }
-        }
-        stage('codecompile with akshat'){
-            steps{
-                echo 'starting compiling'
-                sh 'mvn compile'
-            }
-        }
-        stage('codetesting with akshat'){
-            steps{
-                sh 'mvn test'
-            }
-        }
-        stage('qa with akshat'){
-            steps{
-                sh 'mvn checkstyle:checkstyle'
-            }
-        }
-        stage('package with akshat'){
-            steps{
-                sh 'mvn package'
-            }
-        }
-        stage('run dockerfile'){
-          steps{
-               sh 'docker build -t myimg1 .'
-           }
-         }
-        stage('port expose'){
-            steps{
-                sh 'docker run -dt -p 8082:8082 --name c001 myimg1'
-            }
-        }   
+pipeline {
+  agent any
+  stages {
+    stage('Checkout') {
+      steps {
+        git url: 'https://github.com/shubhamgunjal198/health-care-project.git'
+      }
     }
+    stage('Build') {
+      steps {
+        sh 'mvn clean package'
+      }
+    }
+    stage('Docker Build & Push') {
+      steps {
+        sh '''
+          docker build -t shubhamgunjal1619/healthcare:latest .
+          docker login -u shubhamgunjal1619 -p <your_dockerhub_password>
+          docker push shubhamgunjal1619/healthcare:latest
+        '''
+      }
+    }
+    stage('Deploy to K8s') {
+      steps {
+        sh 'ansible-playbook ansible/deploy.yml'
+      }
+    }
+  }
 }
