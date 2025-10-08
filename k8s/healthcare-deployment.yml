@@ -16,5 +16,5 @@ spec:
         - name: healthcare
           image: shubhamgunjal1619/healthcare:latest
           ports:
-            - containerPort: 8080
+            - containerPort: 8082
 
