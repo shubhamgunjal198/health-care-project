@@ -15,7 +15,7 @@ pipeline {
       steps {
         sh '''
           docker build -t shubhamgunjal1619/healthcare:latest .
-          docker login -u shubhamgunjal1619 -p <your_dockerhub_password>
+          docker login -u shubhamgunjal1619 -p Welcome@12345
           docker push shubhamgunjal1619/healthcare:latest
         '''
       }
